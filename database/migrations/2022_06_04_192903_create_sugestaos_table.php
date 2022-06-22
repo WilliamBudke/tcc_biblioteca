@@ -13,12 +13,11 @@ return new class extends Migration
      */
     public function up()
     {
-        Schema::create('notificacaos', function (Blueprint $table) {
-            $table->increments('id');
-            $table->string('mensagens_notificacoes');
-            $table->text('data');
-            $table->enum('status',['N','L']);//N = PARA NAO LIDO;L = PARA LIDO
-            $table->foreignId('id_emprestimo')->nullable()->constrained('emprestimo_livros')->onDelete('cascade');
+        Schema::create('sugestaos', function (Blueprint $table) {
+            $table->id();
+            $table->string('titulo')->nullable();
+            $table->string('sugestao')->nullable();
+            $table->foreignId('id_user')->nullable()->constrained('users')->onDelete('cascade');
             $table->timestamps();
         });
     }
@@ -30,6 +29,6 @@ return new class extends Migration
      */
     public function down()
     {
-        Schema::dropIfExists('notificacaos');
+        Schema::dropIfExists('sugestaos');
     }
 };

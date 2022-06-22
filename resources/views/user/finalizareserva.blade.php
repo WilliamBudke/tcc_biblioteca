@@ -13,6 +13,8 @@
     <script src="https://cdnjs.cloudflare.com/ajax/libs/jquery/3.3.1/jquery.min.js"></script>
     <script src="https://cdnjs.cloudflare.com/ajax/libs/jquery.mask/1.14.15/jquery.mask.js"></script>
     <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.1.3/dist/js/bootstrap.bundle.min.js" integrity="sha384-ka7Sk0Gln4gmtz2MlQnikT1wXgYsOg+OMhuP+IlRH9sENBO0LRn5q+8nbTov4+1p" crossorigin="anonymous"></script>
+    <link href="https://cdn.jsdelivr.net/npm/select2@4.1.0-rc.0/dist/css/select2.min.css" rel="stylesheet" />
+    <script src="https://cdn.jsdelivr.net/npm/select2@4.1.0-rc.0/dist/js/select2.min.js"></script>
 
     <title>Dashboard</title>
 </head>
@@ -46,57 +48,25 @@
         </ul>
     </div>
 </nav>
-@if(Session::has('mensagem-sucesso'))
-    <div class="alert alert-success" role="alert">
-        <strong>{{Session::get('mensagem-sucesso')}}</strong>
-    </div>
-@endif
-<h2 class="mt-3 d-flex justify-content-center">Seja bem-vindo a biblioteca</h2>
-<div class=" mt-3">
-    <main>
-        <section class="section">
-            <form style="max-width: 350px;margin: auto" class="d-flex" role="search" action="" method="get">
-                @csrf
-                <input class="form-control me-2" type="search" name="pesquisa" id="pesquisa" placeholder="Pesquisar" aria-label="Pesquisar">
-                <button class="btn btn-outline-success" type="submit">Pesquisar</button>
-            </form>
-        </section>
-    </main>
-</div>
-@if(count($livros) == 0 && $pesquisa)
-    <p class="d-flex justify-content-center" style="max-width: 250px;margin: auto">Nada encontrado:( <a href="{{route('user.listLivros')}}">Ver todos!</a></p>
-@else
-    @if(count($livros) >= 1 && $pesquisa)
-        <p class="d-flex justify-content-center" style="max-width: 250px;margin: auto"><a href="{{route('user.listLivros')}}">Ver todos!</a></p>
-    @endif
-@endif
-@foreach($livros->chunk(3) as $lchunk)
-<div class="container">
-    <div class="row mt-3 d-flex justify-content-center">
-        @foreach($lchunk as  $l)
-        <div class="card" style="width: 18rem;">
-            <img class="mt-1 ms-3"src="{{ asset('/storage/'.$l->image) }}" style="max-width:150px" class="card-img-top img-responsive" alt="...">
-            <div class="card-body">
-                <h5 class="card-title">{{$l->titulo}}</h5>
-                <p class="card-text">Autor: {{$l->autor}}</p>
-                <p class="card-text">Gênero: {{$l->genero}}</p>
-                <p class="card-text">ISBN: {{$l->isbn}}</p>
-            </div>
-            <form action="{{ route('user.AddCarrinhoCompra',['id'=> $l->id])}}" method="post">
-                @csrf
-                @method('post')
-                <div class="mb-2">
-                    <button class="btn btn-primary">Adicionar a Locação</button>
-                </div>
-            </form>
+<h2 class="mt-3 d-flex justify-content-center">Finalização da reserva</h2>
+<form class="row g-3" style="max-width: 850px;margin: auto" method="POST" action="{{route('user.FinalizaReservaDo')}}">
+    @csrf
+    @foreach($livros as $l)
+        <div>
+            <label for="inputText" class="form-label" disabled="disabled">Livro reservado</label>
+            <input class="form-control" id="titulo" name="titulo" disabled="disabled"  value="{{$l->titulo}}">
+            <input class="form-control" id="id" name="id" type="hidden" value="{{$l->id}}">
         </div>
-        @endforeach
-        </div>
+    @endforeach
+    <div>
+        <label for="inputText" class="form-label" disabled="disabled">Data para retirada</label>
+        <br>
+        <input id="date" name="date" type="date" required>
     </div>
-</div>
-@endforeach
-<div id="div_paginacao" class="span12 mt-3 d-flex justify-content-center" style="width: 200px; margin: 0 auto; float: none;">
-    {{$livros->links('pagination::bootstrap-4')}}
+    <div class="col-12">
+        <button type="submit" class="btn btn-primary">Reservar</button>
+    </div>
+</form>
 </div>
 </body>
 </html>

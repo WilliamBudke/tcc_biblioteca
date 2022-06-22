@@ -16,12 +16,11 @@ return new class extends Migration
         Schema::create('emprestimos', function (Blueprint $table) {
             $table->id();
             $table->date('data_emprestimo');
-            $table->date('prazo_emprestimo');
+            $table->string('id_biblioteca');
             $table->date('data_entrega');
             $table->float('multa_emprestimo');
-            $table->enum('status',['L','D','N'])->default('N');
-            $table->unsignedBigInteger('id_usuario');
-            $table->foreign('id_usuario')->references('id')->on('users')->onDelete('cascade');
+            $table->enum('status',['RE','LOC','DEV','RET']);//RET = PARA RETIRAR;RE = RESERVADO; LOC=LOCADO; DEV= DEVOVLIDO
+            $table->foreignId('id_usuario')->nullable()->constrained('users')->onDelete('cascade');
             $table->timestamps();
         });
     }

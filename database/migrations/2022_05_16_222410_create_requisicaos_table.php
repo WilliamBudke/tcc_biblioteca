@@ -21,10 +21,8 @@ return new class extends Migration
             $table->integer('quantidade_requisicao');
             $table->integer('numeroedicao_requisicao');
             $table->integer('volume_requisicao');
-            $table->unsignedBigInteger('id_fornecedor');
-            $table->foreign('id_fornecedor')->references('id')->on('fornecedors')->onDelete('cascade');
-            $table->unsignedBigInteger('id_biblioteca');
-            $table->foreign('id_biblioteca')->references('id')->on('users')->onDelete('cascade');
+            $table->foreignId('id_biblioteca')->nullable()->constrained('users')->onDelete('cascade');
+            $table->foreignId('id_fornecedor')->nullable()->constrained('fornecedors')->onDelete('cascade');
             $table->timestamps();
         });
     }

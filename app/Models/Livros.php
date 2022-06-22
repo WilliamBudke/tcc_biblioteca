@@ -24,4 +24,11 @@ class Livros extends Model
         'quantidade',
         'image',
     ];
+    public function Livro(){
+        return $this->belongsTo(emprestimo_livro::class,'id_livro');
+    }
+    public function Biblioteca(){
+        return $this->hasMany(User::class,'id_biblioteca');
+    }
+
 }

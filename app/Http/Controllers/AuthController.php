@@ -2,14 +2,40 @@
 
 namespace App\Http\Controllers;
 use App\Http\Requests\StoreUserRegister;
+use App\Models\Emprestimo;
+use App\Models\Notificacao;
+use App\Notifications\EntregaNotification;
+use Carbon\Carbon;
 use Illuminate\Support\Facades\Auth;
 use Illuminate\Http\Request;
 use App\Http\Controllers\UserController;
 use App\Models\User;
+use Illuminate\Support\Facades\DB;
 
 class AuthController extends Controller
 {
     public function dashboard(){
+
+        $users = Emprestimo::where('data_entrega',Carbon::today())->where('status','LOC')->pluck('id');
+
+            foreach ($users as $user) {
+                $idemp = Notificacao::consultaId([
+                    'id_emprestimo' => $user,
+                ]);
+                if(empty($idemp)){
+                $u = Emprestimo::findOrFail($user);
+
+                $not = new Notificacao;
+
+                $not-> mensagens_notificacoes = 'Hoje é a data de entrega do emprestimo de ID:';
+                $not-> id_emprestimo = $u->id;
+                $not-> data = Carbon::today();
+                $not-> status  = 'N';
+
+                $not->save();
+            }
+        }
+
         if(Auth::check() === true AND Auth::User()->admin == 1){
             return redirect()->route('admin.ListLivroDo');
         }

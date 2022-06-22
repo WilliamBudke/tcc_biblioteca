@@ -26,7 +26,7 @@
         <div class="collapse navbar-collapse" id="navbarNavAltMarkup">
             <div class="navbar-nav">
                 <a class="nav-link" href="{{route('user.listLivros')}}">Acervo</a>
-                <a class="nav-link" href="{{route('user.listlivroReserva')}}">Reserva</a>
+                <a class="nav-link" href="#">Reserva</a>
                 <a class="nav-link" href="{{route('user.ListLocados')}}">Locados</a>
                 <a class="nav-link" href="{{route('user.ListSugestoes')}}">Enviar sugestão</a>
             </div>
@@ -46,57 +46,29 @@
         </ul>
     </div>
 </nav>
-@if(Session::has('mensagem-sucesso'))
-    <div class="alert alert-success" role="alert">
-        <strong>{{Session::get('mensagem-sucesso')}}</strong>
-    </div>
-@endif
-<h2 class="mt-3 d-flex justify-content-center">Seja bem-vindo a biblioteca</h2>
-<div class=" mt-3">
-    <main>
-        <section class="section">
-            <form style="max-width: 350px;margin: auto" class="d-flex" role="search" action="" method="get">
+<h2 class="mt-3 d-flex justify-content-center">Notificações</h2>
+<table class="table mb-3 mt-3"  style="max-width: 800px;margin: auto">
+    <thead>
+    <tr>
+        <th scope="col">Mensagem</th>
+    </tr>
+    </thead>
+    @foreach($not as $n)
+    <tbody>
+    <tr>
+        <td>{{$n->mensagens_notificacoes}}{{$n->id_emprestimo}}</td>
+        <td>
+            <form action="{{route('user.NotificacaoLida',['id'=> $n->id])}}" method="post">
                 @csrf
-                <input class="form-control me-2" type="search" name="pesquisa" id="pesquisa" placeholder="Pesquisar" aria-label="Pesquisar">
-                <button class="btn btn-outline-success" type="submit">Pesquisar</button>
+                <button type="submit" class="btn btn-info">Marcar como lido</button>
             </form>
-        </section>
-    </main>
-</div>
-@if(count($livros) == 0 && $pesquisa)
-    <p class="d-flex justify-content-center" style="max-width: 250px;margin: auto">Nada encontrado:( <a href="{{route('user.listLivros')}}">Ver todos!</a></p>
-@else
-    @if(count($livros) >= 1 && $pesquisa)
-        <p class="d-flex justify-content-center" style="max-width: 250px;margin: auto"><a href="{{route('user.listLivros')}}">Ver todos!</a></p>
-    @endif
-@endif
-@foreach($livros->chunk(3) as $lchunk)
-<div class="container">
-    <div class="row mt-3 d-flex justify-content-center">
-        @foreach($lchunk as  $l)
-        <div class="card" style="width: 18rem;">
-            <img class="mt-1 ms-3"src="{{ asset('/storage/'.$l->image) }}" style="max-width:150px" class="card-img-top img-responsive" alt="...">
-            <div class="card-body">
-                <h5 class="card-title">{{$l->titulo}}</h5>
-                <p class="card-text">Autor: {{$l->autor}}</p>
-                <p class="card-text">Gênero: {{$l->genero}}</p>
-                <p class="card-text">ISBN: {{$l->isbn}}</p>
-            </div>
-            <form action="{{ route('user.AddCarrinhoCompra',['id'=> $l->id])}}" method="post">
-                @csrf
-                @method('post')
-                <div class="mb-2">
-                    <button class="btn btn-primary">Adicionar a Locação</button>
-                </div>
-            </form>
-        </div>
-        @endforeach
-        </div>
-    </div>
-</div>
-@endforeach
+        </td>
+    </tr>
+    </tbody>
+    @endforeach
+</table>
 <div id="div_paginacao" class="span12 mt-3 d-flex justify-content-center" style="width: 200px; margin: 0 auto; float: none;">
-    {{$livros->links('pagination::bootstrap-4')}}
+    {{$not->links('pagination::bootstrap-4')}}
 </div>
 </body>
 </html>

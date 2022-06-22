@@ -12,7 +12,14 @@ class Notificacao extends Model
     use HasApiTokens, HasFactory, Notifiable;
 
     protected $fillable = [
-        'mensagem_notificacao',
-        'id_usuario',
+        'mensagens_notificacoes',
+        'id_emprestimo',
+        'data'
     ];
+
+    public static function  consultaId($where){
+        $emp = self::where('id_emprestimo',$where)->first(['id']);
+        return !empty($emp->id) ? $emp->id : null;
+    }
+
 }

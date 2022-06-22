@@ -32,11 +32,6 @@
         </ul>
     </div>
 </nav>
-@if(Session::has('mensagem-sucesso'))
-    <div class="alert alert-success" role="alert">
-        <strong class="text-center">{{Session::get('mensagem-sucesso')}}</strong>
-    </div>
-@endif
 <main>
     <div class="container mb-3 mt-3">
         <section>
@@ -57,55 +52,20 @@
             </div>
         </section>
         <div>
-            <h2 class="mt-3">Solicitação de locações</h2>
+            <h2 class="mt-3">Denifição do valor da multa</h2>
+            <a>Favor informar somente números e utilize "." para separar</a>
         </div>
-        <section class="section">
-            <form style="max-width: 350px;margin: auto" class="d-flex" role="search" action="" method="get">
+        <section class="section  mt-5">
+            <form style="max-width: 350px;margin: auto" class="d-flex" role="search" action="{{route('admin.ValorMultaDo')}}" method="post">
                 @csrf
-                <input class="form-control me-2" type="search" name="pesquisa" id="pesquisa" placeholder="Pesquisar por usuário" aria-label="Pesquisar">
-                <button class="btn btn-outline-success" type="submit">Pesquisar</button>
+                <input class="form-control me-2" name="valor" id="valor" placeholder="Informe o valor: 1.80">
+                <button class="btn btn-outline-success" type="submit">Confirmar</button>
             </form>
         </section>
-        <table class="table mb-3 mt-3"  style="max-width: 1200px;margin: auto">
-            <thead>
-            <tr>
-                <th scope="col">ID Emprestimo</th>
-                <th scope="col">Email</th>
-                <th scope="col">Leitor</th>
-                <th scope="col">Data de locação</th>
-                <th scope="col">Data de devolução</th>
-            </tr>
-            </thead>
-            @foreach($var as $v)
-                <tbody>
-                <tr>
-                    <th scope="col">{{$v->id}}</th>
-                    <th scope="col">{{$v->user->email}}</th>
-                    <th scope="col">{{$v->user->name}}</th>
-                    <th scope="col">{{$v->data_emprestimo}}</th>
-                    <th scope="col">{{$v->data_entrega}}</th>
-                    <td>
-                        <form action="{{ route('admin.ListadeLivros',['id'=> $v->id])}}" method="post">
-                            @csrf
-                            <button type="submit" class="btn btn-info">Visualizar Livros</button>
-                        </form>
-                    </td>
-                    <td>
-                        <form action="{{ route('admin.LocarLivros',['id'=> $v->id])}}" method="post">
-                            @csrf
-                            <button type="submit" class="btn btn-info">Locar</button>
-                        </form>
-                    </td>
-                </tr>
-                </tbody>
-            @endforeach
-        </table>
     </div>
 </main>
 
 <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.1.3/dist/js/bootstrap.bundle.min.js" integrity="sha384-ka7Sk0Gln4gmtz2MlQnikT1wXgYsOg+OMhuP+IlRH9sENBO0LRn5q+8nbTov4+1p" crossorigin="anonymous"></script>
-<div id="div_paginacao" class="span12 mt-3 d-flex justify-content-center" style="width: 200px; margin: 0 auto; float: none;">
-    {{$var->links('pagination::bootstrap-4')}}
-</div>
+
 </body>
 </html>

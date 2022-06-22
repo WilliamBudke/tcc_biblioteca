@@ -46,12 +46,17 @@
         </ul>
     </div>
 </nav>
+@if(Session::has('mensagem-erro'))
+    <div class="alert alert-danger" role="alert">
+        <strong>{{Session::get('mensagem-erro')}}</strong>
+    </div>
+@endif
 @if(Session::has('mensagem-sucesso'))
     <div class="alert alert-success" role="alert">
         <strong>{{Session::get('mensagem-sucesso')}}</strong>
     </div>
 @endif
-<h2 class="mt-3 d-flex justify-content-center">Seja bem-vindo a biblioteca</h2>
+<h2 class="mt-3 d-flex justify-content-center">Reserva de livros</h2>
 <div class=" mt-3">
     <main>
         <section class="section">
@@ -71,29 +76,29 @@
     @endif
 @endif
 @foreach($livros->chunk(3) as $lchunk)
-<div class="container">
-    <div class="row mt-3 d-flex justify-content-center">
-        @foreach($lchunk as  $l)
-        <div class="card" style="width: 18rem;">
-            <img class="mt-1 ms-3"src="{{ asset('/storage/'.$l->image) }}" style="max-width:150px" class="card-img-top img-responsive" alt="...">
-            <div class="card-body">
-                <h5 class="card-title">{{$l->titulo}}</h5>
-                <p class="card-text">Autor: {{$l->autor}}</p>
-                <p class="card-text">Gênero: {{$l->genero}}</p>
-                <p class="card-text">ISBN: {{$l->isbn}}</p>
-            </div>
-            <form action="{{ route('user.AddCarrinhoCompra',['id'=> $l->id])}}" method="post">
-                @csrf
-                @method('post')
-                <div class="mb-2">
-                    <button class="btn btn-primary">Adicionar a Locação</button>
+    <div class="container">
+        <div class="row mt-3 d-flex justify-content-center">
+            @foreach($lchunk as  $l)
+                <div class="card" style="width: 18rem;">
+                    <img class="mt-1 ms-3"src="{{ asset('/storage/'.$l->image) }}" style="max-width:150px" class="card-img-top img-responsive" alt="...">
+                    <div class="card-body">
+                        <h5 class="card-title">{{$l->titulo}}</h5>
+                        <p class="card-text">Autor: {{$l->autor}}</p>
+                        <p class="card-text">Gênero: {{$l->genero}}</p>
+                        <p class="card-text">ISBN: {{$l->isbn}}</p>
+                    </div>
+                    <form action="{{ route('user.FinalizaReserva',['id'=> $l->id])}}" method="post">
+                        @csrf
+                        @method('post')
+                        <div class="mb-2">
+                            <button class="btn btn-primary">Reservar</button>
+                        </div>
+                    </form>
                 </div>
-            </form>
-        </div>
-        @endforeach
+            @endforeach
         </div>
     </div>
-</div>
+    </div>
 @endforeach
 <div id="div_paginacao" class="span12 mt-3 d-flex justify-content-center" style="width: 200px; margin: 0 auto; float: none;">
     {{$livros->links('pagination::bootstrap-4')}}

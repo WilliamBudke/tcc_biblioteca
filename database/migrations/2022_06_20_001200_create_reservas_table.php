@@ -13,15 +13,13 @@ return new class extends Migration
      */
     public function up()
     {
-        Schema::create('emprestimo_livros', function (Blueprint $table) {
+        Schema::create('reservas', function (Blueprint $table) {
             $table->id();
             $table->string('id_biblioteca');
-            $table->date('data_emprestimo');
-            $table->date('data_entrega');
-            $table->float('multa_emprestimo')->nullable();
-            $table->enum('status',['RE','LOC','DEV', 'RET']);//RE = RESERVADO; LOC=LOCADO; DEV= DEVOVLIDO
+            $table->date('data_reserva');
+            $table->enum('status',['RE','LOC','RET']);//RE = RESERVADO; LOC=LOCADO; RET = PARA RETIRAR
             $table->foreignId('id_livro')->nullable()->constrained('livros')->onDelete('cascade');
-            $table->foreignId('id_emprestimo')->nullable()->constrained('emprestimos')->onDelete('cascade');
+            $table->foreignId('id_leitor')->nullable()->constrained('users')->onDelete('cascade');
             $table->timestamps();
         });
     }
@@ -33,6 +31,6 @@ return new class extends Migration
      */
     public function down()
     {
-        Schema::dropIfExists('emprestimo_livros');
+        Schema::dropIfExists('reservas');
     }
 };

@@ -32,11 +32,6 @@
         </ul>
     </div>
 </nav>
-@if(Session::has('mensagem-sucesso'))
-    <div class="alert alert-success" role="alert">
-        <strong class="text-center">{{Session::get('mensagem-sucesso')}}</strong>
-    </div>
-@endif
 <main>
     <div class="container mb-3 mt-3">
         <section>
@@ -57,7 +52,7 @@
             </div>
         </section>
         <div>
-            <h2 class="mt-3">Solicitação de locações</h2>
+            <h2 class="mt-3">Históricos de Locação</h2>
         </div>
         <section class="section">
             <form style="max-width: 350px;margin: auto" class="d-flex" role="search" action="" method="get">
@@ -85,15 +80,9 @@
                     <th scope="col">{{$v->data_emprestimo}}</th>
                     <th scope="col">{{$v->data_entrega}}</th>
                     <td>
-                        <form action="{{ route('admin.ListadeLivros',['id'=> $v->id])}}" method="post">
+                        <form action="{{ route('admin.ListadeLivrosDevolvidos',['id'=> $v->id])}}" method="post">
                             @csrf
                             <button type="submit" class="btn btn-info">Visualizar Livros</button>
-                        </form>
-                    </td>
-                    <td>
-                        <form action="{{ route('admin.LocarLivros',['id'=> $v->id])}}" method="post">
-                            @csrf
-                            <button type="submit" class="btn btn-info">Locar</button>
                         </form>
                     </td>
                 </tr>
@@ -103,9 +92,9 @@
     </div>
 </main>
 
+
+
 <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.1.3/dist/js/bootstrap.bundle.min.js" integrity="sha384-ka7Sk0Gln4gmtz2MlQnikT1wXgYsOg+OMhuP+IlRH9sENBO0LRn5q+8nbTov4+1p" crossorigin="anonymous"></script>
-<div id="div_paginacao" class="span12 mt-3 d-flex justify-content-center" style="width: 200px; margin: 0 auto; float: none;">
-    {{$var->links('pagination::bootstrap-4')}}
-</div>
+
 </body>
 </html>

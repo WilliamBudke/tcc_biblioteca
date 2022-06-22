@@ -24,8 +24,7 @@ return new class extends Migration
             $table->string('editora');
             $table->string('quantidade');
             $table->string('image')->nullable();
-            $table->unsignedBigInteger('id_biblioteca');
-            $table->foreign('id_biblioteca')->references('id')->on('users')->onDelete('cascade');
+            $table->foreignId('id_biblioteca')->nullable()->constrained('users')->onDelete('cascade');
             $table->timestamps();
         });
     }

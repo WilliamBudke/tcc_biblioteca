@@ -55,57 +55,61 @@
             <div class="btn-group" role="group" aria-label="Basic example">
                 <a href="{{route('admin.ValorMulta')}}" type="button" class="btn btn-success">Definir Valor das Multas</a>
             </div>
+            <div class="btn-group" role="group" aria-label="Basic example">
+                <a href="{{route('admin.CarrinhoCompra')}}" type="button" class="btn btn-success">Concluir locação</a>
+            </div>
         </section>
-        <div>
-            <h2 class="mt-3">Solicitação de locações</h2>
+        <h2 class="mt-3 d-flex justify-content-center">Locação de livros</h2>
+        <div class=" mt-3">
+            <main>
+                <section class="section">
+                    <form style="max-width: 350px;margin: auto" class="d-flex" role="search" action="" method="get">
+                        @csrf
+                        <input class="form-control me-2" type="search" name="pesquisa" id="pesquisa" placeholder="Pesquisar" aria-label="Pesquisar">
+                        <button class="btn btn-outline-success" type="submit">Pesquisar</button>
+                    </form>
+                </section>
+            </main>
         </div>
-        <section class="section">
-            <form style="max-width: 350px;margin: auto" class="d-flex" role="search" action="" method="get">
-                @csrf
-                <input class="form-control me-2" type="search" name="pesquisa" id="pesquisa" placeholder="Pesquisar por usuário" aria-label="Pesquisar">
-                <button class="btn btn-outline-success" type="submit">Pesquisar</button>
-            </form>
-        </section>
-        <table class="table mb-3 mt-3"  style="max-width: 1200px;margin: auto">
-            <thead>
-            <tr>
-                <th scope="col">ID Emprestimo</th>
-                <th scope="col">Email</th>
-                <th scope="col">Leitor</th>
-                <th scope="col">Data de locação</th>
-                <th scope="col">Data de devolução</th>
-            </tr>
-            </thead>
-            @foreach($var as $v)
-                <tbody>
-                <tr>
-                    <th scope="col">{{$v->id}}</th>
-                    <th scope="col">{{$v->user->email}}</th>
-                    <th scope="col">{{$v->user->name}}</th>
-                    <th scope="col">{{$v->data_emprestimo}}</th>
-                    <th scope="col">{{$v->data_entrega}}</th>
-                    <td>
-                        <form action="{{ route('admin.ListadeLivros',['id'=> $v->id])}}" method="post">
-                            @csrf
-                            <button type="submit" class="btn btn-info">Visualizar Livros</button>
-                        </form>
-                    </td>
-                    <td>
-                        <form action="{{ route('admin.LocarLivros',['id'=> $v->id])}}" method="post">
-                            @csrf
-                            <button type="submit" class="btn btn-info">Locar</button>
-                        </form>
-                    </td>
-                </tr>
-                </tbody>
-            @endforeach
-        </table>
+        @if(count($livros) == 0 && $pesquisa)
+            <p class="d-flex justify-content-center" style="max-width: 250px;margin: auto">Nada encontrado:( <a href="{{route('admin.LocacaoLivro')}}">Ver todos!</a></p>
+        @else
+            @if(count($livros) >= 1 && $pesquisa)
+                <p class="d-flex justify-content-center" style="max-width: 250px;margin: auto"><a href="{{route('admin.LocacaoLivro')}}">Ver todos!</a></p>
+            @endif
+        @endif
+        @foreach($livros->chunk(3) as $lchunk)
+            <div class="container">
+                <div class="row mt-3 d-flex justify-content-center">
+                    @foreach($lchunk as  $l)
+                        <div class="card" style="width: 18rem;">
+                            <img class="mt-1 ms-3"src="{{ asset('/storage/'.$l->image) }}" style="max-width:150px" class="card-img-top img-responsive" alt="...">
+                            <div class="card-body">
+                                <h5 class="card-title">{{$l->titulo}}</h5>
+                                <p class="card-text">Autor: {{$l->autor}}</p>
+                                <p class="card-text">Gênero: {{$l->genero}}</p>
+                                <p class="card-text">ISBN: {{$l->isbn}}</p>
+                            </div>
+                            <form action="{{ route('admin.AdicionaLocacao',['id'=> $l->id])}}" method="post">
+                                @csrf
+                                @method('post')
+                                <div class="mb-2">
+                                    <button class="btn btn-primary">Adicionar a Locação</button>
+                                </div>
+                            </form>
+                        </div>
+                    @endforeach
+                </div>
+            </div>
+    </div>
+    @endforeach
+    <div id="div_paginacao" class="span12 mt-3 d-flex justify-content-center" style="width: 200px; margin: 0 auto; float: none;">
+        {{$livros->links('pagination::bootstrap-4')}}
+    </div>
     </div>
 </main>
 
 <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.1.3/dist/js/bootstrap.bundle.min.js" integrity="sha384-ka7Sk0Gln4gmtz2MlQnikT1wXgYsOg+OMhuP+IlRH9sENBO0LRn5q+8nbTov4+1p" crossorigin="anonymous"></script>
-<div id="div_paginacao" class="span12 mt-3 d-flex justify-content-center" style="width: 200px; margin: 0 auto; float: none;">
-    {{$var->links('pagination::bootstrap-4')}}
-</div>
+
 </body>
 </html>

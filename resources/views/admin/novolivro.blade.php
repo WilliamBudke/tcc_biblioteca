@@ -29,8 +29,8 @@
                 <a class="nav-link" href="{{route('admin.ListLivroDo')}}">Livros</a>
                 <a class="nav-link" href="{{route('admin.ListLeitor')}}">Leitores</a>
                 <a class="nav-link" href="{{route('admin.locarLivro')}}">Locar livro</a>
-                <a class="nav-link" href="">Devolver Livro</a>
-                <a class="nav-link" href="">Reservas</a>
+                <a class="nav-link" href="{{route('admin.ListReservas')}}">Reservas</a>
+                <a class="nav-link" href="{{route('admin.ListSugestoes')}}">Solicitações</a>
             </div>
         </div>
         <ul class="nav navbar-nav navbar-right">

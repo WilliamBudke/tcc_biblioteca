@@ -57,7 +57,7 @@
             </div>
         </section>
         <div>
-            <h2 class="mt-3">Solicitação de locações</h2>
+            <h2 class="mt-3">Em circulação</h2>
         </div>
         <section class="section">
             <form style="max-width: 350px;margin: auto" class="d-flex" role="search" action="" method="get">
@@ -85,15 +85,15 @@
                     <th scope="col">{{$v->data_emprestimo}}</th>
                     <th scope="col">{{$v->data_entrega}}</th>
                     <td>
-                        <form action="{{ route('admin.ListadeLivros',['id'=> $v->id])}}" method="post">
+                        <form action="{{ route('admin.ListadeLivrosCirculacao',['id'=> $v->id])}}" method="post">
                             @csrf
                             <button type="submit" class="btn btn-info">Visualizar Livros</button>
                         </form>
                     </td>
                     <td>
-                        <form action="{{ route('admin.LocarLivros',['id'=> $v->id])}}" method="post">
+                        <form action="{{ route('admin.DevolverLocacao',['id'=> $v->id])}}" method="post">
                             @csrf
-                            <button type="submit" class="btn btn-info">Locar</button>
+                            <button type="submit" class="btn btn-info">Devolver</button>
                         </form>
                     </td>
                 </tr>
